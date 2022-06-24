@@ -437,24 +437,4 @@ write.csv(strongly_correlated_genes,'D:\\PhD Work\\3rd Work\\Restart Work\\Stron
 
 
 
-##visualizing marker expression##
-#VlnPlot(pbmc, features = c("MS4A1", "CD79A"))
-VlnPlot(pbmc, features = c("Mt2--chr8", "ERCC-00076"))
-# you can plot raw counts as well
-VlnPlot(pbmc, features = c("Zfp710--chr7", "Rbbp7--chrX"), slot = "counts", log = TRUE)
 
-###visualizes feature expression on a tSNE or PCA plot##
-FeaturePlot(pbmc, features = c("Mt2--chr8", "Rpl13--chr8", "ERCC-00136", "Cyp2c29--chr19", "Prnp--chr2", "Ern2--chr7", "H2-K1--chr17", "Zrsr1--chr11", "Higd1a--chr9"))
-
-##an expression heatmap for given cells and features##
-top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
-DoHeatmap(pbmc, features = top10$gene) + NoLegend()
-
-##Assigning cell type identity to clusters###
-##Fortunately in the case of this dataset, we can use canonical markers to easily match the unbiased clustering to known cell types##
-new.cluster.ids <- c("Naive CD4 T", "Memory CD4 T", "CD14+ Mono", "B", "CD8 T", "FCGR3A+ Mono", 
-                     "NK", "DC", "Platelet")
-names(new.cluster.ids) <- levels(pbmc)
-pbmc <- RenameIdents(pbmc, new.cluster.ids)
-DimPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
-saveRDS(pbmc, file = "D:/PhD Work/3rd Work/pbmc3k_final.rds")
